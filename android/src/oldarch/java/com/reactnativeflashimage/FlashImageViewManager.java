@@ -1,16 +1,16 @@
 package com.reactnativeflashimage;
 
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.facebook.react.module.annotations.ReactModule;
+
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.bridge.ReactApplicationContext;
-import android.graphics.Color;
-import java.util.Map;
-import java.util.HashMap;
 
-public class FlashImageViewManager extends SimpleViewManager<FlashImageView> {
+public class FlashImageViewManager extends SimpleViewManager<ImageView> {
 
     ReactApplicationContext mCallerContext;
 
@@ -24,13 +24,13 @@ public class FlashImageViewManager extends SimpleViewManager<FlashImageView> {
     }
 
     @Override
-    protected FlashImageView createViewInstance(@NonNull ThemedReactContext context) {
+    protected ImageView createViewInstance(@NonNull ThemedReactContext context) {
         return FlashImageViewManagerImpl.createViewInstance(context);
     }
 
     @ReactProp(name = "color")
-    public void setColor(FlashImageView view, @Nullable String color) {
-        FlashImageViewManagerImpl.setColor(view, color);
+    public void setSource(ImageView view, @Nullable String sourceUri) {
+        FlashImageViewManagerImpl.setSource(view, sourceUri);
     }
 
 }

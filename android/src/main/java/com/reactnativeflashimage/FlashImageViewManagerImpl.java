@@ -1,19 +1,29 @@
 package com.reactnativeflashimage;
 
-import androidx.annotation.Nullable;
 import com.facebook.react.uimanager.ThemedReactContext;
-import android.graphics.Color;
+import android.widget.ImageView;
+
+import coil.Coil;
+import coil.ImageLoader;
+import coil.request.ImageRequest;
 
 public class FlashImageViewManagerImpl {
 
     public static final String NAME = "FlashImageView";
 
-    public static FlashImageView createViewInstance(ThemedReactContext context) {
-        return new FlashImageView(context);
+    public static ImageView createViewInstance(ThemedReactContext context) {
+        return new ImageView(context);
     }
 
-    public static void setColor(FlashImageView view, String color) {
-        view.setBackgroundColor(Color.parseColor(color));
+    public static void setSource(ImageView view, String sourceUri) {
+      final ImageLoader imageLoader = Coil.imageLoader(view.getContext());
+      imageLoader.enqueue(
+        new ImageRequest.Builder(view.getContext())
+          .data(sourceUri)
+          .crossfade(100)
+          .target(view)
+          .build()
+      );
     }
 
 }

@@ -10,7 +10,7 @@ public class FlashImageViewManagerImpl: NSObject {
     imageRequest.options = [.reloadIgnoringCachedData]
     
     var options = ImageLoadingOptions()
-    options.transition = .fadeIn(duration: 0.15)
+    options.transition = .fadeIn(duration: 0.1)
     
     loadImage(with: imageRequest, options: options, into: imageView)
   }

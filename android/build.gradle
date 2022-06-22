@@ -17,7 +17,7 @@ def isNewArchitectureEnabled() {
 }
 
 apply plugin: 'com.android.library'
-   
+
 if (isNewArchitectureEnabled()) {
     apply plugin: 'com.facebook.react'
 }
@@ -74,12 +74,13 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "io.coil-kt:coil:2.1.0"
 }
 
 if (isNewArchitectureEnabled()) {
     react {
         jsRootDir = file("../src/")
-        libraryName = "flashimage"
+        libraryName = "rnflashimage"
         codegenJavaPackageName = "com.reactnativeflashimage"
     }
 }
