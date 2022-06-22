@@ -1,6 +1,6 @@
 {
   "name": "react-native-flash-image",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A spiritual successor to `react-native-fast-image` and a drop-in component for images in React Native.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
