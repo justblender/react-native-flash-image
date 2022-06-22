@@ -1,28 +1,31 @@
 import * as React from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import {Image, ScrollView, StyleSheet} from 'react-native';
 import {FlashImage} from 'react-native-flash-image';
+import {dataSourceUri} from './cat-base64';
+
+const {uri: localSourceUri} = Image.resolveAssetSource(require('./cat.jpeg'));
 
 export default function App() {
-  const sourceUri = `https://loremflickr.com/320/240?${Math.floor(
+  // appending a random number to use a different image on every render
+  const networkSourceUri = `https://loremflickr.com/320/240?${Math.floor(
     Math.random() * 100,
   )}`;
 
   return (
-    <View style={styles.container}>
-      <FlashImage source={sourceUri} style={styles.box} />
-    </View>
+    <ScrollView style={styles.container}>
+      <FlashImage source={localSourceUri} style={styles.image} />
+      <FlashImage source={dataSourceUri} style={styles.image} />
+      <FlashImage source={networkSourceUri} style={styles.image} />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#e2e8f0',
   },
-  box: {
+  image: {
     width: 320,
     height: 240,
   },
