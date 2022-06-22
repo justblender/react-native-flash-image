@@ -6,9 +6,7 @@
 
 **FlashImage** is a spiritual successor to [@DylanVann's](https://github.com/DylanVann) [`react-native-fast-image`](https://github.com/DylanVann/react-native-fast-image) package. 
 
-It is built with the [new React Native architecture](https://reactnative.dev/architecture/overview) in mind and acts as a drop-in replacement for React Native's standard [`Image`](https://reactnative.dev/docs/image) component **on iOS**. 
-
-However, this package is not intended to be a direct replacement of `FastImage`. Availability of APIs may vary and some features such as authorization headers are going to be missing.
+It is built with the [new React Native architecture](https://reactnative.dev/architecture/overview) in mind and _mostly_ acts as a drop-in replacement for React Native's standard [`Image`](https://reactnative.dev/docs/image) component. However, availability of props may vary and some features such as [class methods](https://reactnative.dev/docs/image#methods) are going to be missing.
 
 Under the hood, it uses [Nuke](https://github.com/kean/Nuke) on iOS and [Coil](https://coil-kt.github.io/coil/) on Android.
 
