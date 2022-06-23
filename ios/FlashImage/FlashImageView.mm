@@ -44,17 +44,37 @@ using namespace facebook::react;
   const auto &oldViewProps = *std::static_pointer_cast<FlashImageViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<FlashImageViewProps const>(props);
   
-  std::string sourceUri = oldViewProps.source;
   bool shouldUpdateSource = NO;
   
-  if (oldViewProps.source != newViewProps.source) {
-    sourceUri = newViewProps.source;
+  if (oldViewProps.source.uri != newViewProps.source.uri) {
     shouldUpdateSource = YES;
   }
   
   if (shouldUpdateSource) {
-    auto convertedSourceUri = [[NSString alloc] initWithUTF8String:sourceUri.c_str()];
-    [FlashImageViewManagerImpl loadImageFromUri:_view uri:convertedSourceUri];
+    const auto sourceUri = newViewProps.source.uri;
+    
+    if (!sourceUri.empty()) {      
+      const auto sourceUriValue = [[NSString alloc] initWithUTF8String:sourceUri.c_str()];
+      const auto cacheControlValue = [[NSString alloc] initWithUTF8String:toString(newViewProps.source.cache).c_str()];
+      const auto priorityValue = [[NSNumber alloc] initWithInt:newViewProps.source.priority];
+      
+      const auto progressBlock = ^(NSNumber *completed, NSNumber *total) {
+        // noop
+      };
+          
+      const auto completionBlock = ^(NSNumber *width, NSNumber *height, NSString *error) {
+        // noop
+      };
+
+      [FlashImageViewManagerImpl loadImage:_view
+                                 sourceUri:sourceUriValue
+                             priorityValue:priorityValue
+                         cacheControlValue:cacheControlValue
+                                  progress:progressBlock
+                                completion:completionBlock];
+    } else {
+      _view.image = nil;
+    }
   }
 
   [super updateProps:props oldProps:oldProps];

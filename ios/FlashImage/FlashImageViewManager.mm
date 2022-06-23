@@ -13,10 +13,9 @@ RCT_EXPORT_MODULE(FlashImageView)
   return [[UIImageView alloc] init];
 }
 
- RCT_CUSTOM_VIEW_PROPERTY(source, NSString, UIImageView)
- {
-   [FlashImageViewManagerImpl loadImageFromUri:view uri:json];
-   NSLog(@"setting source (old arch)");
- }
+RCT_CUSTOM_VIEW_PROPERTY(source, NSString, UIImageView)
+{
+//  [FlashImageViewManagerImpl loadImage:view uri:json];
+}
 
 @end
