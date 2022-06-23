@@ -36,6 +36,13 @@ android {
 
   sourceSets {
     main {
+      java {
+        if (safeExtGet('excludeAppGlideModule', false)) {
+          srcDir "src"
+          exclude "**/FlashImageGlideModule.java"
+        }
+      }
+
       if (isNewArchitectureEnabled()) {
         java.srcDirs += ['src/newarch']
       } else {
