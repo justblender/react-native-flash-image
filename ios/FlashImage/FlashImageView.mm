@@ -51,12 +51,14 @@ using namespace facebook::react;
   }
   
   if (shouldUpdateSource) {
-    const auto sourceUri = newViewProps.source.uri;
+    const auto sourceProp = newViewProps.source;
+    const auto sourceUri = sourceProp.uri;
     
-    if (!sourceUri.empty()) {      
-      const auto sourceUriValue = [[NSString alloc] initWithUTF8String:sourceUri.c_str()];
-      const auto cacheControlValue = [[NSString alloc] initWithUTF8String:toString(newViewProps.source.cache).c_str()];
-      const auto priorityValue = [[NSNumber alloc] initWithInt:newViewProps.source.priority];
+    if (!sourceUri.empty()) {
+      const auto requestHeaders = [NSMutableArray arrayWithCapacity:sourceProp.headers.size()];
+      for (const auto &header : sourceProp.headers) {
+        [requestHeaders addObject:[[NSString alloc] initWithUTF8String:header.c_str()]];
+      }
       
       const auto progressBlock = ^(NSNumber *completed, NSNumber *total) {
         // noop
@@ -67,9 +69,10 @@ using namespace facebook::react;
       };
 
       [FlashImageViewManagerImpl loadImage:_view
-                                 sourceUri:sourceUriValue
-                             priorityValue:priorityValue
-                         cacheControlValue:cacheControlValue
+                                requestUri:[[NSString alloc] initWithUTF8String:sourceUri.c_str()]
+                            requestHeaders:[NSArray arrayWithArray:requestHeaders]
+                           requestPriority:[[NSNumber alloc] initWithInt:sourceProp.priority]
+                       requestCacheControl:[[NSString alloc] initWithUTF8String:toString(sourceProp.cache).c_str()]
                                   progress:progressBlock
                                 completion:completionBlock];
     } else {

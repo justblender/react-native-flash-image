@@ -6,15 +6,19 @@ public class FlashImageViewManagerImpl: NSObject {
   
   @objc static public func loadImage(
     _ imageView: UIImageView,
-    sourceUri: NSString,
-    priorityValue: NSNumber,
-    cacheControlValue: NSString,
+    requestUri: NSString,
+    requestHeaders: NSArray,
+    requestPriority: NSNumber,
+    requestCacheControl: NSString,
     progress: @escaping ((_ completed: NSNumber, _ total: NSNumber) -> Void),
     completion: @escaping ((_ width: NSNumber?, _ height: NSNumber?, _ error: NSString?) -> Void)
   ) {
-    var imageRequest = ImageRequest(url: URL(string: String(sourceUri)))
-    imageRequest.options = getRequestOptions(cacheControlValue)
-    imageRequest.priority = getRequestPriority(priorityValue)
+    let imageRequest = createImageRequest(
+      requestUri: requestUri,
+      requestHeaders: requestHeaders,
+      requestPriority: requestPriority,
+      requestCacheControl: requestCacheControl
+    )
     
     var options = ImageLoadingOptions()
     options.transition = .fadeIn(duration: 0.1)
@@ -40,6 +44,27 @@ public class FlashImageViewManagerImpl: NSObject {
         )
       }
     }
+  }
+  
+  static private func createImageRequest(
+    requestUri: NSString,
+    requestHeaders: NSArray,
+    requestPriority: NSNumber,
+    requestCacheControl: NSString
+  ) -> ImageRequest {
+    var urlRequest = URLRequest(url: URL(string: String(requestUri))!)
+    
+    for requestHeader in (requestHeaders as NSArray as! [NSString]) {
+      let separated = requestHeader.components(separatedBy: "=")
+      if separated.count == 2 {
+        urlRequest.setValue(separated[1], forHTTPHeaderField: separated[0])
+      }
+    }
+    
+    var imageRequest = ImageRequest(urlRequest: urlRequest)
+    imageRequest.options = getRequestOptions(requestCacheControl)
+    imageRequest.priority = getRequestPriority(requestPriority)
+    return imageRequest
   }
   
   static private func getRequestPriority(_ priorityValue: NSNumber) -> ImageRequest.Priority {

@@ -31,14 +31,14 @@ export default function App() {
         }}
         style={styles.image}
       />
-      <FlashImage
+      {/* <FlashImage
         source={{
           uri: getRandomImageUrl(),
           priority: RequestPriority.High,
           cache: CacheControl.OnlyIfCached,
         }}
         style={styles.image}
-      />
+      /> */}
     </ScrollView>
   );
 }
