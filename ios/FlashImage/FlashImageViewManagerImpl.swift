@@ -9,7 +9,7 @@ public class FlashImageViewManagerImpl: NSObject {
     requestUri: NSString,
     requestHeaders: NSArray,
     requestPriority: NSNumber,
-    requestCacheControl: NSString,
+    requestCachePolicy: NSString,
     progress: @escaping ((_ completed: NSNumber, _ total: NSNumber) -> Void),
     completion: @escaping ((_ width: NSNumber?, _ height: NSNumber?, _ error: NSString?) -> Void)
   ) {
@@ -17,7 +17,7 @@ public class FlashImageViewManagerImpl: NSObject {
       requestUri: requestUri,
       requestHeaders: requestHeaders,
       requestPriority: requestPriority,
-      requestCacheControl: requestCacheControl
+      requestCachePolicy: requestCachePolicy
     )
     
     var options = ImageLoadingOptions()
@@ -50,10 +50,9 @@ public class FlashImageViewManagerImpl: NSObject {
     requestUri: NSString,
     requestHeaders: NSArray,
     requestPriority: NSNumber,
-    requestCacheControl: NSString
+    requestCachePolicy: NSString
   ) -> ImageRequest {
     var urlRequest = URLRequest(url: URL(string: String(requestUri))!)
-    
     for requestHeader in (requestHeaders as NSArray as! [NSString]) {
       let separated = requestHeader.components(separatedBy: "=")
       if separated.count == 2 {
@@ -62,7 +61,7 @@ public class FlashImageViewManagerImpl: NSObject {
     }
     
     var imageRequest = ImageRequest(urlRequest: urlRequest)
-    imageRequest.options = getRequestOptions(requestCacheControl)
+    imageRequest.options = getRequestOptions(requestCachePolicy)
     imageRequest.priority = getRequestPriority(requestPriority)
     return imageRequest
   }
@@ -71,8 +70,8 @@ public class FlashImageViewManagerImpl: NSObject {
     return ImageRequest.Priority(rawValue: Int(truncating: priorityValue)) ?? .normal
   }
   
-  static private func getRequestOptions(_ cacheControlValue: NSString) -> ImageRequest.Options {
-    switch cacheControlValue {
+  static private func getRequestOptions(_ cachePolicyValue: NSString) -> ImageRequest.Options {
+    switch cachePolicyValue {
     case "ignore-cache":
       return [.reloadIgnoringCachedData]
     case "only-if-cached":

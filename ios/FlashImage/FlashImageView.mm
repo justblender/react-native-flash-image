@@ -46,6 +46,7 @@ using namespace facebook::react;
   
   bool shouldUpdateSource = NO;
   
+  // todo: clean this up
   if (oldViewProps.source.uri != newViewProps.source.uri) {
     shouldUpdateSource = YES;
   }
@@ -72,7 +73,7 @@ using namespace facebook::react;
                                 requestUri:[[NSString alloc] initWithUTF8String:sourceUri.c_str()]
                             requestHeaders:[NSArray arrayWithArray:requestHeaders]
                            requestPriority:[[NSNumber alloc] initWithInt:sourceProp.priority]
-                       requestCacheControl:[[NSString alloc] initWithUTF8String:toString(sourceProp.cache).c_str()]
+                        requestCachePolicy:[[NSString alloc] initWithUTF8String:toString(sourceProp.cache).c_str()]
                                   progress:progressBlock
                                 completion:completionBlock];
     } else {

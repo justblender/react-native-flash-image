@@ -8,7 +8,7 @@ export enum RequestPriority {
   VeryHigh = 4,
 }
 
-export enum CacheControl {
+export enum CachePolicy {
   Default = 'default',
   IgnoreCache = 'ignore-cache',
   OnlyIfCached = 'only-if-cached',
@@ -18,7 +18,7 @@ export type SourceUriProp = {
   uri: string;
   headers?: Headers;
   priority?: RequestPriority;
-  cache?: CacheControl;
+  cache?: CachePolicy;
 };
 
 export type FlashImageProps = ViewProps & {
