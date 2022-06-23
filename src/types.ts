@@ -1,9 +1,5 @@
 import type { ViewProps } from 'react-native';
 
-export type RequestHeaders = {
-  [key: string]: string;
-};
-
 export enum RequestPriority {
   VeryLow = 0,
   Low = 1,

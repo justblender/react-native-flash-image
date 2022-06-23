@@ -1,6 +1,6 @@
 import React from 'react';
 import { requireNativeComponent } from 'react-native';
-import type { FlashImageProps, RequestHeaders } from './types';
+import type { FlashImageProps } from './types';
 
 const isFabricEnabled = global.nativeFabricUIManager != null;
 
@@ -16,6 +16,6 @@ export const FlashImage = ({ source, ...rest }: FlashImageProps) => {
   return <NativeFlashImageView source={serializedSource} {...rest} />;
 };
 
-const serializeHeaders = (headers: RequestHeaders) => {
+const serializeHeaders = (headers: Headers) => {
   return Object.entries(headers).map(([header, value]) => `${header}=${value}`);
 };
