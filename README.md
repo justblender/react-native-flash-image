@@ -2,11 +2,11 @@
 
 > ⚠️ **CAUTION: This package is still a work-in-progress and isn't recommended for production use as of yet.**
 
-**FlashImage** is a spiritual successor to [@DylanVann's](https://github.com/DylanVann) [`react-native-fast-image`](https://github.com/DylanVann/react-native-fast-image) package. 
+**FlashImage** is a spiritual successor to [@DylanVann's](https://github.com/DylanVann) [`react-native-fast-image`](https://github.com/DylanVann/react-native-fast-image) package.
 
 It is built with the [new React Native architecture](https://reactnative.dev/architecture/overview) in mind and _mostly_ acts as a drop-in replacement for React Native's standard [`Image`](https://reactnative.dev/docs/image) component. However, availability of props may vary and some features such as [class methods](https://reactnative.dev/docs/image#methods) are going to be missing.
 
-Under the hood, it uses [Nuke](https://github.com/kean/Nuke) on iOS and [Coil](https://coil-kt.github.io/coil/) on Android.
+Under the hood, it uses [Nuke](https://github.com/kean/Nuke) on iOS and [Glide](https://github.com/bumptech/glide) on Android.
 
 ## Installation
 
@@ -16,6 +16,10 @@ Under the hood, it uses [Nuke](https://github.com/kean/Nuke) on iOS and [Coil](h
 npm i react-native-flash-image
 npx pod-install
 ```
+
+### Android
+
+As of now, there are still a few more steps to get this package working on Android.
 
 Autolinking on Android doesn’t work with the new architecture out of the box, therefore you need to do the following steps:
 
@@ -64,12 +68,24 @@ Autolinking on Android doesn’t work with the new architecture out of the box, 
         }
         ```
 
+If you are using Glide within your application using an `AppGlideModule`, then you will need to prevent the inclusion of the `AppGlideModule` in this package.
+
+You can do this by setting `project.ext.excludeAppGlideModule` to `true` in `android/build.gradle`:
+
+```gradle
+project.ext {
+  excludeAppGlideModule = true
+}
+```
+
 ## Usage
+
+_A more detailed documentation is coming soon. For now, you can rely on the built-in types if you're really eager to try this package out._
 
 ```js
 import { FlashImage } from "react-native-flash-image";
 
-<FlashImage source="https://loremflickr.com/320/240" />
+<FlashImage source={{uri: "https://loremflickr.com/320/240"}} />
 ```
 
 ## Contributing
