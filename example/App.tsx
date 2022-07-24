@@ -2,11 +2,10 @@ import * as React from 'react';
 
 import {Image, ScrollView, StyleSheet} from 'react-native';
 import {
-  CacheControl,
+  CachePolicy,
   FlashImage,
   RequestPriority,
 } from 'react-native-flash-image';
-import {dataSourceUri} from './cat-base64';
 
 const {uri: localSourceUri} = Image.resolveAssetSource(require('./cat.jpeg'));
 
@@ -14,12 +13,16 @@ export default function App() {
   return (
     <ScrollView style={styles.container}>
       <FlashImage source={{uri: localSourceUri}} style={styles.image} />
-      <FlashImage source={{uri: dataSourceUri}} style={styles.image} />
       <FlashImage
         source={{
           uri: getRandomImageUrl(),
           priority: RequestPriority.Low,
-          cache: CacheControl.Default,
+          cache: CachePolicy.IgnoreCache,
+        }}
+        onProgress={({nativeEvent}) => {
+          console.log(
+            `${(nativeEvent.bytesWritten / nativeEvent.bytesExpected) * 100}%`,
+          );
         }}
         style={styles.image}
       />
@@ -27,7 +30,7 @@ export default function App() {
         source={{
           uri: getRandomImageUrl(),
           priority: RequestPriority.Normal,
-          cache: CacheControl.IgnoreCache,
+          headers: [['X-Custom-Header', 'Custom-Value']],
         }}
         style={styles.image}
       />
