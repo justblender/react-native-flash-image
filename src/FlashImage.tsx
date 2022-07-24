@@ -9,13 +9,9 @@ const NativeFlashImageView = isFabricEnabled
   : requireNativeComponent('FlashImageView');
 
 export const FlashImage = ({ source, ...rest }: FlashImageProps) => {
-  const serializedSource = source.headers
-    ? { ...source, headers: serializeHeaders(source.headers ?? {}) }
+  const serializedSource = source?.headers
+    ? { ...source, headers: source.headers.flatMap((a) => a) }
     : source;
 
   return <NativeFlashImageView source={serializedSource} {...rest} />;
-};
-
-const serializeHeaders = (headers: Headers) => {
-  return Object.entries(headers).map(([header, value]) => `${header}=${value}`);
 };

@@ -5,9 +5,12 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+
+import java.util.Map;
 
 public class FlashImageViewManager extends SimpleViewManager<FlashImageView> {
 
@@ -32,5 +35,13 @@ public class FlashImageViewManager extends SimpleViewManager<FlashImageView> {
   @ReactProp(name = "source")
   public void setSource(@NonNull FlashImageView view, @Nullable ReadableMap sourceProp) {
     view.setSource(sourceProp);
+  }
+
+  @Nullable
+  @Override
+  public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+    return MapBuilder.of(
+      "topProgress", MapBuilder.of("registrationName", "onProgress")
+    );
   }
 }

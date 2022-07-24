@@ -48,4 +48,12 @@ public class FlashImageViewManager extends SimpleViewManager<FlashImageView>
   public void setSource(@NonNull FlashImageView view, @Nullable ReadableMap sourceProp) {
     view.setSource(sourceProp);
   }
+
+  @Nullable
+  @Override
+  public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+    return MapBuilder.of(
+      "topProgress", MapBuilder.of("registrationName", "onProgress")
+    );
+  }
 }

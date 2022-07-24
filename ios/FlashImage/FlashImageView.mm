@@ -17,7 +17,7 @@ using namespace facebook::react;
 @end
 
 @implementation FlashImageView {
-  UIImageView * _view;
+  FlashImageNativeView * _view;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -30,12 +30,10 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const FlashImageViewProps>();
     _props = defaultProps;
-
-    _view = [[UIImageView alloc] init];
-
+    _view = [[FlashImageNativeView alloc] init];
     self.contentView = _view;
   }
-
+  
   return self;
 }
 
@@ -43,7 +41,7 @@ using namespace facebook::react;
 {
   const auto &oldViewProps = *std::static_pointer_cast<FlashImageViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<FlashImageViewProps const>(props);
-  
+   
   bool shouldUpdateSource = NO;
   
   // todo: clean this up
@@ -61,27 +59,52 @@ using namespace facebook::react;
         [requestHeaders addObject:[[NSString alloc] initWithUTF8String:header.c_str()]];
       }
       
-      const auto progressBlock = ^(NSNumber *completed, NSNumber *total) {
-        // noop
+      const auto progressBlock = ^(double bytesWritten, double bytesExpected) {
+        if (const auto eventEmitter = self.getEventEmitter) {
+          eventEmitter->onProgress(FlashImageViewEventEmitter::OnProgress{
+            .bytesWritten = bytesWritten,
+            .bytesExpected = bytesExpected
+          });
+        }
       };
           
-      const auto completionBlock = ^(NSNumber *width, NSNumber *height, NSString *error) {
-        // noop
+      const auto completionBlock = ^(int32_t width, int32_t height, NSString *error) {
+        // if (const auto eventEmitter = self.getEventEmitter) {
+        //   if (error) {
+        //     eventEmitter->onError(FlashImageViewEventEmitter::OnError{
+        //       .message = std::string([error UTF8String])
+        //     });
+        //   } else {
+        //     eventEmitter->onLoadEnd(FlashImageViewEventEmitter::OnLoadEnd{
+        //       .width = width,
+        //       .height = height
+        //     });
+        //   }
+        // }
       };
 
-      [FlashImageViewManagerImpl loadImage:_view
-                                requestUri:[[NSString alloc] initWithUTF8String:sourceUri.c_str()]
-                            requestHeaders:[NSArray arrayWithArray:requestHeaders]
-                           requestPriority:[[NSNumber alloc] initWithInt:sourceProp.priority]
-                        requestCachePolicy:[[NSString alloc] initWithUTF8String:toString(sourceProp.cache).c_str()]
-                                  progress:progressBlock
-                                completion:completionBlock];
+      [_view setSource:[[NSString alloc] initWithUTF8String:sourceUri.c_str()]
+        requestHeaders:[NSArray arrayWithArray:requestHeaders]
+       requestPriority:sourceProp.priority
+    requestCachePolicy:[[NSString alloc] initWithUTF8String:toString(sourceProp.cache).c_str()]
+              progress:progressBlock
+            completion:completionBlock];
     } else {
       _view.image = nil;
     }
   }
 
   [super updateProps:props oldProps:oldProps];
+}
+
+- (std::shared_ptr<const FlashImageViewEventEmitter>)getEventEmitter
+{
+  if (!self->_eventEmitter) {
+    return nullptr;
+  }
+
+  assert(std::dynamic_pointer_cast<FlashImageViewEventEmitter const>(self->_eventEmitter));
+  return std::static_pointer_cast<FlashImageViewEventEmitter const>(self->_eventEmitter);
 }
 
 Class<RCTComponentViewProtocol> FlashImageViewCls(void)
